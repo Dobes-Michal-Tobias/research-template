@@ -1,0 +1,23 @@
+# Core
+numpy
+pandas
+scikit-learn
+python-dotenv
+tqdm
+pyyaml
+
+# Visualization (default stack — see src/viz.py)
+matplotlib
+seaborn
+
+# Notebook / kernel
+jupyter
+ipykernel
+
+# --- Optional, uncomment per project ---
+# torch                     # deep learning
+# transformers              # HF models
+# networkx                  # network/graph analysis + viz -> see modules/network_viz
+# plotly                    # interactive viz
+# groq                      # LLM API client -> see modules/llm_client
+# openai                    # if using OpenAI-compatible endpoints
