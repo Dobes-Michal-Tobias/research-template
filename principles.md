@@ -100,7 +100,7 @@ alone isn't enough, compare runs visually.
 ## Modules — pulling only what a project needs
 
 `modules/` holds domain-specific code that not every project needs
-(`ml_model`, `llm_client`, `network_viz`, ...). Rather than bloating every
+(`ml_model`, `llm_client`, `network_viz`, `dataviz_style`, ...). Rather than bloating every
 new project with unused code, cherry-pick via sparse-checkout:
 
 ```bash
