@@ -54,10 +54,15 @@ scripts/        environment setup scripts
 
 - `src/config.py` — project paths (`DATA_RAW`, `MODELS_DIR`, ...), loads
   `.env`, defines `RANDOM_SEED`.
-- `src/viz.py` — shared seaborn/matplotlib style (`set_style()`), consistent
-  palette, `save_fig()`. Intentionally light on pre-built chart types —
-  add plotting functions here as a project actually needs them, instead of
-  a huge unused chart library.
+- `src/viz.py` — the project's chart functions on top of the house style
+  in [`modules/dataviz_style`](modules/dataviz_style) (`set_style()`,
+  `PALETTE`, `save_fig()`). Intentionally light on pre-built chart types —
+  add plotting functions here as a project actually needs them.
+- [`modules/dataviz_style`](modules/dataviz_style) — the house chart style
+  (European Correspondent register): palettes with fixed roles, white for
+  papers / cream for the web, annotation helpers, poster composer. Its
+  [`STYLE_GUIDE.md`](modules/dataviz_style/STYLE_GUIDE.md) is the spec for
+  every figure; kept in every project.
 - `src/io_utils.py` — `append_row_csv()` (incremental, crash-safe logging),
   `iter_progress()` (tqdm wrapper), `already_done_ids()` (resume long jobs).
 
@@ -83,7 +88,8 @@ Then copy the files you need into your project's `src/`.
 ## Conventions (short version)
 
 - Notebooks orchestrate; logic lives in `.py` files.
-- All plots go through `src/viz.py`, default seaborn style.
+- All plots go through `src/viz.py` in the house style
+  ([`STYLE_GUIDE.md`](modules/dataviz_style/STYLE_GUIDE.md)); white background for papers.
 - Long-running loops: progress bar + incremental CSV writes, always.
 - Every trained classifier reports F1, Precision, Recall, AUPRC.
 - `data/`, `models/`, `reports/figures/` are gitignored; `.env` holds

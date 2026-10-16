@@ -33,8 +33,12 @@ ax = plot_barplot(df, x="category", y="score")
 
 ## Visualization
 
-- Default library: **seaborn** (+ matplotlib), one shared style set via
-  `src.viz.set_style()`, called once per notebook.
+- House style: `modules/dataviz_style` — read its `STYLE_GUIDE.md`
+  (palettes with fixed roles, paper vs web, chart catalogue). Call
+  `set_style(bg="white", medium="paper")` once per notebook (journals are
+  always white; cream `bg="cream", medium="web"` only for the personal site
+  / posters). matplotlib + the module's helpers; seaborn only for the
+  statistics, with colours passed explicitly.
 - All plotting functions live in `src/viz.py` (or a project-specific
   submodule for a large project). Don't inline `plt.plot(...)` calls in
   notebooks.

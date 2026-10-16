@@ -53,9 +53,15 @@ scripts/        skripty pro nastavení prostředí
 
 - `src/config.py` — cesty projektu (`DATA_RAW`, `MODELS_DIR`, ...), načítá
   `.env`, definuje `RANDOM_SEED`.
-- `src/viz.py` — sdílený seaborn/matplotlib styl (`set_style()`), jednotná
-  paleta, `save_fig()`. Záměrně bez velkého množství předpřipravených
+- `src/viz.py` — grafy projektu postavené na domácím stylu
+  z [`modules/dataviz_style`](modules/dataviz_style) (`set_style()`,
+  `PALETTE`, `save_fig()`). Záměrně bez velkého množství předpřipravených
   grafů — funkce sem přidávej, až je projekt reálně potřebuje.
+- [`modules/dataviz_style`](modules/dataviz_style) — domácí styl grafů
+  (inspirace The European Correspondent): palety s pevnými rolemi, bílé
+  pozadí pro články / krémové pro web, pomocné funkce pro anotace, plakáty.
+  [`STYLE_GUIDE.md`](modules/dataviz_style/STYLE_GUIDE.md) je specifikace
+  pro každý graf; patří do každého projektu.
 - `src/io_utils.py` — `append_row_csv()` (inkrementální, crash-safe zápis),
   `iter_progress()` (obal nad tqdm), `already_done_ids()` (navázání na
   přerušený běh).
@@ -82,7 +88,8 @@ Pak zkopíruj potřebné soubory do `src/` svého projektu.
 ## Konvence (stručně)
 
 - Notebook orchestruje, logika je v `.py` souborech.
-- Všechny grafy jdou přes `src/viz.py`, výchozí styl seaborn.
+- Všechny grafy jdou přes `src/viz.py` v domácím stylu
+  ([`STYLE_GUIDE.md`](modules/dataviz_style/STYLE_GUIDE.md)); do článků vždy bílé pozadí.
 - Dlouhé smyčky: vždy progress bar + inkrementální zápis do CSV.
 - Každý natrénovaný klasifikátor reportuje F1, Precision, Recall, AUPRC.
 - `data/`, `models/`, `reports/figures/` jsou gitignored; `.env` obsahuje
