@@ -80,6 +80,10 @@ WINE, GOLD, GREEN, VIOLET = "#a61b57", "#b07d00", "#1ea381", "#a35ec1"
 ROSE, APRICOT, JADE, PLUM = "#af535f", "#dfa044", "#29a987", "#723c7e"
 YELLOW, MINT, MAUVE = "#f4c54d", "#69c2a4", "#a885a6"   # HolidayCalc fills
 YELLOW_TEXT, MINT_TEXT = "#b07d00", "#097d5a"           # their text twins (>= 3:1)
+# classic (GeoGram, PeriodSimulation); gray lightened from #9a9a92 to clear the
+# normal-vision floor against steel (dE 14.5 -> 16.4)
+STEEL, TERRACOTTA, SLATE_GRAY, CHARCOAL = "#4682b4", "#c1440e", "#a3a29b", "#3d3a33"
+DUSTY_BLUE = "#7296b4"                                  # EC map blue, sampled from the reference set
 
 CATEGORICAL: dict[str, dict] = {
     "house": {
@@ -97,6 +101,12 @@ CATEGORICAL: dict[str, dict] = {
         "band": (0.43, 0.86),
         "chroma": 0.05,
     },
+    "classic": {
+        "colors": [STEEL, TERRACOTTA, SLATE_GRAY, CHARCOAL],
+        "use": "conservative GeoGram / PeriodSimulation look; blue + terracotta accent + grays",
+        "band": (0.30, 0.77),
+        "chroma": 0.0,   # two slots are deliberately neutral
+    },
 }
 
 SEQUENTIAL: dict[str, list[str]] = {
@@ -110,13 +120,17 @@ SEQUENTIAL: dict[str, list[str]] = {
 
 DIVERGING: dict[str, list[str]] = {
     # negative arm, light neutral midpoint, positive arm (odd length).
-    # Purple <-> gold is the only blue-free pair that survives CVD: every
-    # red/wine <-> green/sage/teal/gray candidate collapses for deutans at
-    # equal lightness (see STYLE_GUIDE.md §3.4).
+    # Only purple <-> gold/orange and rose/terracotta <-> blue survive CVD:
+    # every red/wine <-> green/sage/teal/gray candidate collapses for deutans
+    # at equal lightness (see STYLE_GUIDE.md §3.4).
     "violet_gold":  ["#4a1f6b", "#7d3fa3", "#b48ad1", "#dccbe9", "#eeeae4",
                      "#f2d088", "#e6b43c", "#b07d00", "#704f00"],
     "plum_apricot": ["#3f1f4a", "#723c7e", "#a77bb0", "#d6c3da", "#eeeae4",
                      "#f6d6ad", "#eba862", "#bd7a2a", "#7a4a12"],
+    "rose_blue":    ["#7d2f45", "#b8566a", "#d98393", "#eeb0bb", "#eeeae4",   # EC maps ("Divided Germany")
+                     "#aac6e8", "#7fa6cf", "#5f8db0", "#2f5d84"],
+    "terracotta_steel": ["#7a2a08", "#c1440e", "#e08a5f", "#f3c7ad", "#eeeae4",   # classic palette
+                         "#bfd3e6", "#86acd0", "#4682b4", "#24507a"],
 }
 
 SOLID, DASHED, DOTTED, DASHDOT = "-", (0, (5, 2)), (0, (1, 1.6)), (0, (6, 2, 1, 2))
