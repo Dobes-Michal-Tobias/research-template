@@ -29,7 +29,7 @@ def _save(fig: plt.Figure, name: str) -> None:
 # --- palettes ---------------------------------------------------------------
 def palettes_sheet() -> None:
     """Swatches of every palette on both surfaces, with hex codes and roles."""
-    fig, axes = plt.subplots(1, 2, figsize=(11, 8.2))
+    fig, axes = plt.subplots(1, 2, figsize=(11, 10.6))
     for ax, bg in zip(axes, ("white", "cream")):
         cs.set_style(bg=bg, medium="web")
         t = cs.theme()
@@ -37,8 +37,8 @@ def palettes_sheet() -> None:
         ax.add_patch(Rectangle((0, 0), 1, 1, transform=ax.transAxes, color=t["bg"], zorder=-1))
         ax.axis("off")
         ax.set_xlim(0, 10)
-        ax.set_ylim(0, 23)
-        y = 22
+        ax.set_ylim(0, 30)
+        y = 29
         ax.text(0, y, f"{bg} surface  {t['bg']}", fontfamily=cs.FONT_SERIF, fontsize=12, fontweight="bold",
                 color=t["ink"], va="center")
         y -= 1.4
@@ -248,6 +248,23 @@ def grid_maps(bg: str = "white") -> None:
     _save(fig, f"08_grid_maps_{bg}")
 
 
+def classic_shares(bg: str = "white") -> None:
+    """The conservative `classic` palette (GeoGram): steel for the finding, terracotta reserved, grays."""
+    cs.set_style(bg=bg, medium="paper")
+    labels = ["-ice", "-ovice", "-anice", "-nice", "-avice", "-ěnice"]
+    pct = [0.82, 0.76, 0.71, 0.55, 0.48, 0.21]
+    colors = [cs.STEEL] * 5 + [cs.TERRACOTTA]
+    fig, ax = plt.subplots(figsize=(cs.WIDTHS["onehalf"], cs.lollipop_height(len(labels)) * 0.8))
+    cs.hlollipop(ax, labels, pct, colors=colors, value_fmt=lambda v: f"{v:.0%}")
+    cs.ref_line(ax, x=0.5)
+    ax.set_xlim(0, 1)
+    ax.xaxis.set_major_formatter(lambda v, _: f"{v:.0%}")
+    ax.set_xlabel("Share of municipalities with plural agreement (synthetic)")
+    cs.callout(ax, xy=(0.24, 0), xytext=(0.36, 0.75), text="the only suffix\nwith a singular majority",
+               color=cs.TERRACOTTA)
+    _save(fig, f"10_classic_shares_{bg}")
+
+
 def poster() -> None:
     """Standalone social image (cream, 4:5): serif headline + subtitle + footer around one chart."""
     years = np.arange(1990, 2026)
@@ -286,6 +303,7 @@ def main() -> None:
     highlight_bars_demo("cream")
     waffles("cream")
     grid_maps("white")
+    classic_shares("white")
     poster()
     print(f"gallery written to {OUT}")
 
