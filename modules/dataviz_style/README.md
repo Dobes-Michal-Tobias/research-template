@@ -1,88 +1,91 @@
 # module: dataviz_style
 
-Optional module — copy into a project's `src/` for the shared matplotlib
-house style: fonts, color palette, chrome rules (spines/grid), SVG export,
-a couple of chart-shape helpers (lollipop, binned-logistic), and a
-standalone "poster" composer for social/print exports.
+The house chart style for papers and the web (European Correspondent
+register, HolidayCalc palette). **Read `STYLE_GUIDE.md` first** — it is the
+spec: contexts (paper / web / poster), palettes and their roles, typography,
+axes, annotations, a catalogue of chart forms, checklists. This README is
+only the mechanics.
 
-Read `STYLE_GUIDE.md` first — it explains *why* each rule exists (a design
-decision, not just a code default). This README is just the mechanics of
-using the code.
+Unlike the other modules this one is part of the core: `src/viz.py` builds
+on it, so keep `modules/dataviz_style/` in every project.
+
+![palettes](gallery/00_palettes.png)
 
 ## Contents
 
-- `chartstyle.py` — the whole shared style: `set_style()`,`save_fig()`,
-  `hlollipop()`, `share_lollipop()`, `binned_logistic()`, `compose_poster()`,
-  plus the palette/typography constants.
-- `fonts/` — bundled IBM Plex Sans/Mono/Serif `.ttf` files. These are
-  registered into matplotlib at runtime by `chartstyle.set_style()` — no
-  need to install them as OS fonts.
-- `STYLE_GUIDE.md` — the actual design spec in prose: palette roles,
-  typography rules, chrome rules, when to use a lollipop vs. a bar,
-  in-article vs. poster titling, map style. Read this when writing a new
-  chart function and unsure what "matches the house style" means.
+| file | what |
+|---|---|
+| `STYLE_GUIDE.md` | the design spec and the reasons behind each rule |
+| `chartstyle.py` | `set_style()`, surface tokens (`theme()`), palettes (`CATEGORICAL`, `SEQUENTIAL`, `DIVERGING`, `palette()`, `cmap()`), sizes (`figsize()`, `MEDIA`), annotation helpers, chart shapes, `save_fig()`, `compose_poster()` |
+| `palette_check.py` | computed validation of every palette (lightness, chroma, CVD, contrast, ramp monotonicity) |
+| `gallery.py` | renders `gallery/*.png`: one example per recipe; copy-paste starting points |
+| `fonts/` | IBM Plex Sans / Serif (incl. italics) / Mono `.ttf` (SIL OFL), registered at runtime |
 
-## How to pull just this module
+## Quick start
+
+```python
+import matplotlib.pyplot as plt
+from modules.dataviz_style import chartstyle as cs
+
+cs.set_style(bg="white", medium="paper")      # journal figure (the default)
+# cs.set_style(bg="cream", medium="web")      # personal site with a cream page
+
+fig, ax = plt.subplots(figsize=cs.figsize("onehalf"))
+cs.context_lines(ax, years, others)           # many light lines
+ax.plot(years, focus, color=cs.WINE)          # the story
+cs.direct_labels(ax, [(years[-1], focus[-1], "Czechia", cs.WINE)], dots=True)
+cs.gridline_labels(ax, unit="index (2015 = 100)")
+cs.save_fig(fig, "reports/figures/cooling")   # paper -> .pdf .svg .png ; web -> .svg
+```
+
+Standalone social image:
+
+```python
+fig = cs.compose_poster([lambda ax: plot_cooling(df, ax=ax)],
+                        title="Turn the AC on",
+                        subtitle="Household cooling doubled since 2015",
+                        byline="michaltobiasdobes.cz", source="Eurostat (2024)")
+cs.save_fig(fig, "reports/figures/poster_cooling", formats="png")
+```
+
+Commands:
 
 ```bash
-git clone --no-checkout https://github.com/<you>/research-template.git tmp_template
+python -m modules.dataviz_style.palette_check     # validate all palettes on white and cream
+python -m modules.dataviz_style.gallery           # re-render the specimen images
+```
+
+## Gallery
+
+| | |
+|---|---|
+| ![](gallery/01_line_highlight_context_white.png) highlight + context, end dots, gridline labels | ![](gallery/02_annotated_series_cream.png) event lines, fading highlight span, callout (cream) |
+| ![](gallery/03_small_multiples_ci_white.png) paper small multiples, CI bands, panel letters | ![](gallery/04_dot_strip_groups_cream.png) dot strip, warm ordinal ramp, legend in a sentence |
+| ![](gallery/05_diverging_lollipop_white.png) diverging lollipop, open ring = not notable | ![](gallery/06_highlight_bars_cream.png) one accented bar, values on bars |
+| ![](gallery/07_waffles_cream.png) waffle small multiples | ![](gallery/08_grid_maps_white.png) stepped sequential / diverging grid maps |
+| ![](gallery/09_poster_cream.png) poster (4:5, cream) | |
+
+## Pulling just this module into an existing project
+
+```bash
+git clone --no-checkout https://github.com/Dobes-Michal-Tobias/research-template.git tmp_template
 cd tmp_template
 git sparse-checkout init --cone
 git sparse-checkout set modules/dataviz_style
 git checkout
 ```
 
-Then copy `modules/dataviz_style/` (code + fonts) into the target project's
-`src/` (or leave it as `modules/dataviz_style/` if that project already
-follows this template's layout) and import from it:
+Copy `modules/dataviz_style/` (code + fonts) into the project under the same
+path, so `from modules.dataviz_style import chartstyle` works. The gallery
+PNGs can be left out.
 
-```python
-from dataviz_style.chartstyle import set_style, save_fig, hlollipop, PRIMARY_COLOR
+## Migrating from the old version (steelblue / terracotta)
 
-def plot_something(df, ax=None):
-    set_style()  # once per notebook; bg="cream" for the warm-canvas variant
-    if ax is None:
-        fig, ax = plt.subplots(figsize=(8, 4))
-    else:
-        fig = ax.figure
-    hlollipop(ax, df["label"], df["value"], color=PRIMARY_COLOR)
-    save_fig(fig, "reports/figures/something")  # -> something.svg
-    return fig
-```
-
-## Usage sketch — a project's own `config.py`
-
-`chartstyle.py` fixes the *mechanism* (fonts, chrome, SVG export). A
-project's own semantic categories ("plural" = blue, "risk" = terracotta)
-still live in that project's `config.py`, e.g.:
-
-```python
-from dataviz_style.chartstyle import PRIMARY_COLOR, ACCENT_COLOR, NEUTRAL_COLOR
-
-COLORS = {
-    "majority_category": PRIMARY_COLOR,
-    "flagged_as_anomaly": ACCENT_COLOR,   # terracotta stays reserved for this
-    "comparison_category": NEUTRAL_COLOR,
-}
-```
-
-## Usage sketch — a standalone poster (LinkedIn/social/print export)
-
-```python
-from dataviz_style.chartstyle import compose_poster, save_fig
-
-fig = compose_poster(
-    [lambda ax: plot_overview(df, ax=ax), lambda ax: plot_by_suffix(df, ax=ax)],
-    title="Ty Pardubice, nebo ta Kopřivnice?",
-    subtitle="Gramatické číslo obcí na -ice podle sufixu",
-    source="michaltobiasdobes.cz | GeoGram",
-    bg="cream",
-)
-save_fig(fig, "reports/figures/poster_geogram", fmt="png")  # poster -> PNG, not SVG
-```
-
-Don't use `compose_poster()` for the charts that go inside a real article's
-HTML — those should stay title-less images with the title/subtitle in
-`<h2>`/`<figcaption>` (mobile-responsive, screen-reader/SEO friendly,
-editable without re-running Python). `compose_poster()` is only for a
-standalone image that must carry its own title as pixels.
+`PRIMARY_COLOR`, `ACCENT_COLOR`, `NEUTRAL_COLOR`, `CATEGORICAL_PALETTE` and
+`GRID_ON_*` are gone (blue and terracotta are no longer house colours);
+`set_style()` gained `medium=`; `save_fig()` returns a list of paths and
+picks formats by medium. `INK_COLOR`, `MUTED_COLOR`, `BG_WHITE`, `BG_CREAM`,
+`BAR_WIDTH`, `hlollipop`, `lollipop_height`, `share_lollipop`,
+`binned_logistic`, `add_poster_titles` and `compose_poster` keep their
+names. Projects that vendored the old module (HolidayCalc, GeoGram) keep
+working with their own copy.
