@@ -63,7 +63,7 @@ python -m modules.dataviz_style.gallery           # re-render the specimen image
 | ![](gallery/03_small_multiples_ci_white.png) paper small multiples, CI bands, panel letters | ![](gallery/04_dot_strip_groups_cream.png) dot strip, warm ordinal ramp, legend in a sentence |
 | ![](gallery/05_diverging_lollipop_white.png) diverging lollipop, open ring = not notable | ![](gallery/06_highlight_bars_cream.png) one accented bar, values on bars |
 | ![](gallery/07_waffles_cream.png) waffle small multiples | ![](gallery/08_grid_maps_white.png) stepped sequential / diverging grid maps |
-| ![](gallery/09_poster_cream.png) poster (4:5, cream) | |
+| ![](gallery/09_poster_cream.png) poster (4:5, cream) | ![](gallery/10_classic_shares_white.png) conservative `classic` palette: steel + reserved terracotta |
 
 ## Pulling just this module into an existing project
 
@@ -82,7 +82,8 @@ PNGs can be left out.
 ## Migrating from the old version (steelblue / terracotta)
 
 `PRIMARY_COLOR`, `ACCENT_COLOR`, `NEUTRAL_COLOR`, `CATEGORICAL_PALETTE` and
-`GRID_ON_*` are gone (blue and terracotta are no longer house colours);
+`GRID_ON_*` are gone; steel blue and terracotta now live in the `classic`
+palette (`STEEL`, `TERRACOTTA`, `SLATE_GRAY`, `CHARCOAL`, see STYLE_GUIDE §3.2);
 `set_style()` gained `medium=`; `save_fig()` returns a list of paths and
 picks formats by medium. `INK_COLOR`, `MUTED_COLOR`, `BG_WHITE`, `BG_CREAM`,
 `BAR_WIDTH`, `hlollipop`, `lollipop_height`, `share_lollipop`,

@@ -107,7 +107,7 @@ is warm, and a cool gray next to wine looks dirty.
 
 ### 3.2 Categorical palettes
 
-All three are 4 slots, validated on both surfaces (all pairs, not just
+All four are 4 slots, validated on both surfaces (all pairs, not just
 neighbours). Order = assignment priority for a *new* project; once a
 project maps a category to a colour, that mapping is fixed.
 
@@ -143,6 +143,22 @@ darker **text twins**: yellow → `#b07d00`, mint → `#097d5a`
 (`label_color()` does the mapping). Wine stays the *anomaly* colour in
 this set (HolidayCalc: the record, the deviation, the false claim).
 
+**`classic` — the conservative look** (GeoGram, PeriodSimulation)
+
+| slot | name | hex | role |
+|---|---|---|---|
+| 1 | steel blue | `#4682b4` | the main / majority series, the tested finding |
+| 2 | terracotta | `#c1440e` | **reserved** accent: risk, threshold, anomaly, "not found" |
+| 3 | slate gray | `#a3a29b` | the comparison series (a main series here, unlike `context`) |
+| 4 | charcoal | `#3d3a33` | a third series or the descriptive / untested one |
+
+Restrained and safe for a conservative journal or a supervisor who dislikes
+colour: one hue carries the story, terracotta is used sparingly as the
+alarm, grays do the rest. The gray is lightened from the original
+`#9a9a92` (ΔE 14.5 against steel, below the 15 floor) to `#a3a29b`
+(16.4); it is under 3:1 contrast, so gray series get direct labels.
+Do not mix `classic` with `house` in one project — pick one identity.
+
 ### 3.3 Sequential ramps (ordered values, light → dark)
 
 | name | steps | use |
@@ -161,15 +177,21 @@ legend. Continuous only for dense fields where steps would band.
 
 | name | arms | use |
 |---|---|---|
-| `violet_gold` | violet ← neutral `#eeeae4` → gold | default |
-| `plum_apricot` | plum ← neutral → apricot | warmer, editorial pages |
+| `violet_gold` | violet ← neutral `#eeeae4` → gold | default with the `house` palette |
+| `plum_apricot` | plum ← neutral → apricot | warmer, with the `editorial` palette |
+| `rose_blue` | rose ← neutral → dusty blue | the EC map look ("Divided Germany", "Heat delays") |
+| `terracotta_steel` | terracotta ← neutral → steel blue | with the `classic` palette |
 
-**Why only purple ↔ gold:** EC's diverging maps use rose ↔ dusty blue, and
-blue is out of my palette. Every blue-free alternative I tested
-(wine/green, wine/teal, wine/sage, wine/gray) collapses for deuteranopes
-at equal lightness (mirrored-step ΔE 0.4–7) — the sign of the value would
-vanish for ~5 % of male readers. Purple ↔ gold/orange survives (ΔE 10–29).
-Do not invent a red–green diverging scale "just for this map".
+Mirrored-step CVD separation (deutan/protan, from the darkest pair to the
+lightest): violet_gold 12–29, plum_apricot 10–26, rose_blue 6.5–10.4,
+terracotta_steel 7.7–21. rose_blue is the weakest near the midpoint: use
+it with ≤ 4 classes per arm and label the extreme classes.
+
+**Why no red–green:** every red/wine ↔ green/teal/sage/gray candidate I
+tested collapses for deuteranopes at equal lightness (mirrored-step ΔE
+0.4–7) — the sign of the value would vanish for ~5 % of male readers. The
+safe axes are purple ↔ orange/gold and red ↔ blue. Do not invent a
+red–green diverging scale "just for this map".
 
 ### 3.5 Highlight + context (the most used EC pattern)
 
@@ -182,10 +204,11 @@ scores"). Same idea for bars: all gray, one accented (gallery `06`).
 
 ### 3.6 What is not in the palette, on purpose
 
-- **No blue, no terracotta** as series colours. Steelblue is every default
-  library's first colour (reads as "default export"); terracotta was the old
-  template's alarm colour and clashes with wine. (EC uses both; this style
-  replaces them with violet and wine / apricot.)
+- **Blue and terracotta live in `classic` and the blue diverging ramps**,
+  not in `house` / `editorial`: next to wine, terracotta reads as a muddy
+  second red, and a default-looking steel blue next to the warm palette
+  breaks the identity. Want blue in a warm chart? Use `rose_blue`'s dusty
+  blue `#7296b4` (`DUSTY_BLUE`), as EC does, for one series or a map.
 - **No rainbow, no viridis/jet by default**, no seaborn "deep".
 - **Gray is never a main series.** Light gray means "context".
 - **Ink (near-black) is a text colour**, and the only series allowed in ink
